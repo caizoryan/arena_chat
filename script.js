@@ -55,8 +55,8 @@ if (token) {
 
 else {
 	// // localhost 
-	// if (window.location.hostname === "localhost") {
-	// window.location = "https://dev.are.na/oauth/authorize?client_id=RHnX4MgnrTomdvNAdr6o05NrrEIoargy13pZtH-Vw10&redirect_uri=https%3A%2F%2Fcaizoryan-httpsrequestforoauthtoken.web.val.run&response_type=code&scope="
+	// if (window.location.href.includes("localhost")) {
+	// 	window.location = "https://dev.are.na/oauth/authorize?client_id=RHnX4MgnrTomdvNAdr6o05NrrEIoargy13pZtH-Vw10&redirect_uri=https%3A%2F%2Fcaizoryan-httpsrequestforoauthtoken.web.val.run&response_type=code&scope="
 	// }
 
 	// production
@@ -112,45 +112,50 @@ function update_chat() {
 		document.querySelector(".channel-select").appendChild(slug_input);
 
 		return
-	};
+	}
+	else {
+		chat.innerHTML = "Loading...";
 
-	get_channel(slug, token).then((data) => {
-		chat.innerHTML = "";
+		get_channel(slug, token).then((data) => {
+			chat.innerHTML = "";
 
-		let last_date
-		if (data?.contents?.length === 0) chat.innerHTML = "No messages yet";
-		else data?.contents?.forEach((block) => {
-			if (!last_date) last_date = new Date(block.connected_at)
-			let time = new Date(block.connected_at)
-			let seconds = time.getSeconds().zeroPad()
-			let minutes = time.getMinutes().zeroPad()
-			let hours = time.getHours().zeroPad()
-			let ampm = hours >= 12 ? 'pm' : 'am';
+			let last_date
+			if (data?.contents?.length === 0) chat.innerHTML = "No messages yet";
+			else data?.contents?.forEach((block) => {
+				if (!last_date) last_date = new Date(block.connected_at)
+				let time = new Date(block.connected_at)
+				let seconds = time.getSeconds().zeroPad()
+				let minutes = time.getMinutes().zeroPad()
+				let hours = time.getHours().zeroPad()
+				let ampm = hours >= 12 ? 'pm' : 'am';
 
-			let distance = new Date(block.connected_at) - last_date
+				let distance = new Date(block.connected_at) - last_date
 
-			if (distance > 1000 * 60 * 60 * 24) {
-				let date = new Date(block.connected_at)
-				chat.innerHTML += `<div class="date">${date.toDateString()}</div>`;
-			}
-			else {
-				let diff_percent = distance / (1000 * 60 * 60 * 24)
-				chat.innerHTML += `<div class="spacer" style="height:${diff_percent * 100}vh"></div>`;
-			}
+				if (distance > 1000 * 60 * 60 * 24) {
+					let date = new Date(block.connected_at)
+					chat.innerHTML += `<div class="date">${date.toDateString()}</div>`;
+				}
+				else {
+					let diff_percent = distance / (1000 * 60 * 60 * 24)
+					chat.innerHTML += `<div class="spacer" style="height:${diff_percent * 100}vh"></div>`;
+				}
 
-			last_date = new Date(block.connected_at)
+				last_date = new Date(block.connected_at)
 
-			let class_name = block.user.id === me?.id ? "me" : ""
-			class_name += block.class === "Media" ? " media" : ""
-			if (block.class == "Text") chat.innerHTML += `<div class="block ${class_name}" id="${block.id}">${block.content_html}<br></br><span class="user">${block.user.first_name}</span><span class="time">((${hours}:${minutes})) ${ampm}</span> </div>`;
-			if (block.class == "Image") chat.innerHTML += `<div class="block ${class_name}" id="${block.id}"><img src="${block?.image?.display?.url}"></div>`;
-			if (block.class == "Link") chat.innerHTML += `<a href=${block.source.url}><div class="block ${class_name}" id="${block.id}"><img src="${block?.image?.display?.url}"></div></a>`;
+				let class_name = block.user.id === me?.id ? "me" : ""
+				class_name += block.class === "Media" ? " media" : ""
+				if (block.class == "Text") chat.innerHTML += `<div class="block ${class_name}" id="${block.id}">${block.content_html}<br></br><span class="user">${block.user.first_name}</span><span class="time">((${hours}:${minutes})) ${ampm}</span> </div>`;
+				if (block.class == "Image") chat.innerHTML += `<div class="block ${class_name}" id="${block.id}"><img src="${block?.image?.display?.url}"></div>`;
+				if (block.class == "Link") chat.innerHTML += `<a href=${block.source.url}><div class="block ${class_name}" id="${block.id}"><img src="${block?.image?.display?.url}"></div></a>`;
 
-			if (block.class == "Media" && block.embed) chat.innerHTML += `<div class="block ${class_name}" id="${block.id}">${block.embed.html}</div>`;
-			else if (block.class == "Media") chat.innerHTML += `<div class="block ${class_name}" id="${block.id}"><img src="${block.image.display.url}"></div>`;
-			chat.scrollTop = chat.scrollHeight;
+				if (block.class == "Media" && block.embed) chat.innerHTML += `<div class="block ${class_name}" id="${block.id}">${block.embed.html}</div>`;
+				else if (block.class == "Media") chat.innerHTML += `<div class="block ${class_name}" id="${block.id}"><img src="${block.image.display.url}"></div>`;
+				chat.scrollTop = chat.scrollHeight;
+			})
 		})
-	})
+	}
+
+
 }
 
 
