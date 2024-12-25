@@ -49,11 +49,11 @@ if (token) {
 else {
 	// // localhost 
 	// if (window.location.hostname === "localhost") {
-	window.location = "https://dev.are.na/oauth/authorize?client_id=CitL7Li-mdYNtuogTS9jsVHOXbXyZKHZFl9wrYimof4&redirect_uri=https%3A%2F%2Fcaizoryan-arenachat.web.val.run&response_type=code&scope="
+	window.location = "https://dev.are.na/oauth/authorize?client_id=RHnX4MgnrTomdvNAdr6o05NrrEIoargy13pZtH-Vw10&redirect_uri=https%3A%2F%2Fcaizoryan-httpsrequestforoauthtoken.web.val.run&response_type=code&scope="
 	// }
 
 	// production
-	// window.location = "https://dev.are.na/oauth/authorize?client_id=XwylhCkCK6FppG5ut8k7-p4E9aMKyDch8C92NIgt26E&redirect_uri=https%3A%2F%2Fcaizoryan-tapetalucida.web.val.run&response_type=code&scope="
+	// window.location = "https://dev.are.na/oauth/authorize?client_id=CitL7Li-mdYNtuogTS9jsVHOXbXyZKHZFl9wrYimof4&redirect_uri=https%3A%2F%2Fcaizoryan-arenachat.web.val.run&response_type=code&scope="
 }
 
 
@@ -85,7 +85,34 @@ Number.prototype.zeroPad = function() {
 
 function update_chat() {
 	let chat = document.querySelector("#chat");
-	if (slug === "") return;
+	if (slug === "") {
+		chat.innerHTML = `
+			<div class="channel-select">
+				<p>Enter Channel Link</p>
+			</div>`;
+
+		let slug_input = document.createElement("input");
+		slug_input.placeholder = "Channel Link/Slug";
+		slug_input.type = "text";
+		slug_input.onkeydown = (e) => {
+			if (e.key === "Enter") {
+				// check if it is a link
+				if (slug_input.value.includes("are.na")) {
+					let split = slug_input.value.split("/")
+					let slug = split[split.length - 1]
+					page("/" + slug)
+				}
+				else page("/" + slug_input.value)
+				document.querySelector(".channel-select").remove();
+			}
+		}
+
+
+
+		document.querySelector(".channel-select").appendChild(slug_input);
+
+		return
+	};
 
 	get_channel(slug, token).then((data) => {
 		chat.innerHTML = "";
