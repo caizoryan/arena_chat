@@ -19,7 +19,7 @@ const init = () => {
 
 
 input.onkeydown = (e) => {
-	if (e.key === "Enter") {
+	if (e.key === "Enter" && !e.shiftKey && e.altKey) {
 		send.click();
 	}
 }
