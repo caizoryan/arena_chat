@@ -17,18 +17,15 @@ export const get_channel = async (slug, auth) => {
     })
     .then((data) => {
       let length = data.length;
-      let get_last = false;
-      console.log("length", length, data.page * data.per);
       if (length > data.page * data.per) {
         // calculate last page
         let last_page = Math.ceil(length / data.per);
-        return join_and_send_channel_page(data.contents, slug, last_page, auth);
-      }
-      return data;
+        return join_and_send_channel_page(data, slug, last_page, auth);
+      } else return data;
     });
 };
 
-const join_and_send_channel_page = async (contents, slug, page, auth) => {
+const join_and_send_channel_page = async (channel, slug, page, auth) => {
   return await fetch(host + `channels/${slug}?per=100&page=${page}&force=true`, {
     headers: {
       Authorization: `Bearer ${auth}`,
@@ -38,9 +35,9 @@ const join_and_send_channel_page = async (contents, slug, page, auth) => {
     },
   }).then((response) => response.json())
     .then((data) => {
-      console.log("data", data);
+      let c = channel.contents;
       let new_contents = data.contents;
-      let combined = contents.concat(new_contents);
+      let combined = [...c, ...new_contents];
       data.contents = combined;
       return data;
     });

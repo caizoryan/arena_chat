@@ -19,10 +19,17 @@ const init = () => {
 
 
 input.onkeydown = (e) => {
+	e.stopPropagation();
+	e.stopImmediatePropagation();
 	if (e.key === "Enter" && !e.shiftKey && e.altKey) {
 		send.click();
 	}
+
+	if (e.key == "Escape") {
+		input.blur();
+	}
 }
+
 send.onclick = async () => {
 	let content = input.value;
 	if (content === "") return;
@@ -49,23 +56,16 @@ if (token) {
 else {
 	// // localhost 
 	// if (window.location.hostname === "localhost") {
-	window.location = "https://dev.are.na/oauth/authorize?client_id=RHnX4MgnrTomdvNAdr6o05NrrEIoargy13pZtH-Vw10&redirect_uri=https%3A%2F%2Fcaizoryan-httpsrequestforoauthtoken.web.val.run&response_type=code&scope="
+	// window.location = "https://dev.are.na/oauth/authorize?client_id=RHnX4MgnrTomdvNAdr6o05NrrEIoargy13pZtH-Vw10&redirect_uri=https%3A%2F%2Fcaizoryan-httpsrequestforoauthtoken.web.val.run&response_type=code&scope="
 	// }
 
 	// production
-	// window.location = "https://dev.are.na/oauth/authorize?client_id=CitL7Li-mdYNtuogTS9jsVHOXbXyZKHZFl9wrYimof4&redirect_uri=https%3A%2F%2Fcaizoryan-arenachat.web.val.run&response_type=code&scope="
+	window.location = "https://dev.are.na/oauth/authorize?client_id=CitL7Li-mdYNtuogTS9jsVHOXbXyZKHZFl9wrYimof4&redirect_uri=https%3A%2F%2Fcaizoryan-arenachat.web.val.run&response_type=code&scope="
 }
 
 
 function start_chat() {
-	update_channel()
 	update_chat();
-}
-
-function update_channel() {
-	get_channel(slug, token).then((data) => {
-		console.log(data);
-	})
 }
 
 function check_me() {
@@ -136,7 +136,6 @@ function update_chat() {
 			else {
 				let diff_percent = distance / (1000 * 60 * 60 * 24)
 				chat.innerHTML += `<div class="spacer" style="height:${diff_percent * 100}vh"></div>`;
-
 			}
 
 			last_date = new Date(block.connected_at)
@@ -144,15 +143,12 @@ function update_chat() {
 			let class_name = block.user.id === me?.id ? "me" : ""
 			class_name += block.class === "Media" ? " media" : ""
 			if (block.class == "Text") chat.innerHTML += `<div class="block ${class_name}" id="${block.id}">${block.content_html}<br></br><span class="user">${block.user.first_name}</span><span class="time">((${hours}:${minutes})) ${ampm}</span> </div>`;
-			if (block.class == "Image") chat.innerHTML += `<div class="block ${class_name}" id="${block.id}"><img src="${block.image.display.url}"></div>`;
-			if (block.class == "Link") chat.innerHTML += `<a href=${block.source.url}><div class="block ${class_name}" id="${block.id}"><img src="${block.image.display.url}"></div></a>`;
+			if (block.class == "Image") chat.innerHTML += `<div class="block ${class_name}" id="${block.id}"><img src="${block?.image?.display?.url}"></div>`;
+			if (block.class == "Link") chat.innerHTML += `<a href=${block.source.url}><div class="block ${class_name}" id="${block.id}"><img src="${block?.image?.display?.url}"></div></a>`;
 
 			if (block.class == "Media" && block.embed) chat.innerHTML += `<div class="block ${class_name}" id="${block.id}">${block.embed.html}</div>`;
 			else if (block.class == "Media") chat.innerHTML += `<div class="block ${class_name}" id="${block.id}"><img src="${block.image.display.url}"></div>`;
 			chat.scrollTop = chat.scrollHeight;
-
-			console.log(block)
-			console.log(block.class)
 		})
 	})
 }
@@ -161,4 +157,10 @@ function update_chat() {
 window.onload = () => {
 	init();
 	page("/" + slug)
+
+	window.addEventListener("keydown", (e) => {
+		if (e.key === "Enter" && e.metaKey) {
+			input.focus();
+		}
+	})
 }
