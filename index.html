@@ -1,0 +1,171 @@
+<!Doctype html>
+<html>
+
+<head>
+	<title>Tapeta Lucida Chat</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<style>
+	* {
+		padding: 0;
+		margin: 0;
+
+		-ms-overflow-style: none;
+		/* IE 11 */
+		scrollbar-width: none;
+
+		font-family: monospace;
+
+	}
+
+	:root {
+		--colors-gray0: #F5F1F0;
+		--colors-gray1: #EAE6E5;
+		--colors-gray2: #E0DBDA;
+		--colors-gray3: #CAC5C4;
+		--colors-gray4: #AAA4A3;
+		--colors-gray5: #7F7977;
+		--colors-gray6: #4A4240;
+		--colors-gray7: #342C2A;
+		--colors-red1: #F3EAEC;
+		--colors-red2: #EACCDB;
+		--colors-red3: #C95D9E;
+	}
+
+	.block {
+		border: 1px dotted var(--colors-red2);
+		margin: 10px;
+		padding: 10px;
+		/* box-shadow: 0 0 30px 10px rgba(0, 0, 255, 0.2); */
+		margin-right: 20%;
+	}
+
+	.time {
+		opacity: .5;
+		font-size: 1.2em;
+		margin-left: -1em;
+	}
+
+	.date {
+		color: grey;
+		font-size: .7em;
+		margin-bottom: 10em;
+		margin-top: 5em;
+		margin-left: 2em;
+	}
+
+	.spacer {
+		height: 20.294449074074077vh;
+		border-left: .5px dotted #6c5252;
+		margin: 0 40%;
+	}
+
+	p {
+		line-height: 1.4em;
+		margin-bottom: .6em;
+	}
+
+	.container {
+		width: 100vw;
+		height: 100vh;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: var(--colors-gray0);
+		flex-direction: column;
+	}
+
+	#chat {
+		height: 75vh;
+		/* box-shadow: 0 0 30px 10px rgba(0, 0, 255, 0.2); */
+		width: 96vw;
+		overflow-y: scroll;
+		max-width: 900px;
+	}
+
+	#chat :last-child {
+		margin-bottom: 50px;
+	}
+
+	span.user {
+		color: grey;
+		font-size: .7em;
+	}
+
+	.block img {
+		width: 95%;
+		margin: 2%;
+	}
+
+	textarea {
+		all: unset;
+		font-size: 1.2em;
+		border: 1px solid var(--colors-red2);
+	}
+
+	button#send {
+		all: unset;
+		padding: 10px;
+		font-size: 1.2em;
+		max-height: 1em;
+		max-width: 8em;
+		border: 1px solid var(--colors-red2);
+		cursor: pointer;
+
+		background-color: var(--colors-red1);
+		color: var(--colors-red3);
+		text-transform: uppercase;
+		font-family: monospace;
+		letter-spacing: .08em;
+	}
+
+	.controls {
+		background-color: var(--colors-gray0);
+		/* position: fixed; */
+		/* bottom: 4vh; */
+		/* left: 4vw; */
+		max-width: 600px;
+		width: 66vw;
+		height: 10vh;
+		display: grid;
+		grid-template-columns: 8fr 1fr;
+		padding: 10px;
+
+		box-shadow: 0 0 30px 10px var(--colors-gray1);
+	}
+
+
+	.controls textarea {
+		width: 95%;
+		height: 95%;
+
+		background-color: var(--colors-red1);
+		color: var(--colors-red3);
+	}
+
+	.me {
+		background-color: var(--colors-gray3);
+
+		background-color: var(--colors-red1);
+		color: var(--colors-red3);
+
+		margin-left: 20%;
+		margin-right: 0;
+	}
+</style>
+
+<body>
+	<div class="container">
+		<div id="chat"></div>
+		<div class="controls">
+			<textarea id="message"></textarea>
+			<button id="send">Send</button>
+		</div>
+	</div>
+</body>
+<script src="./script.js" type="module">
+
+</script>
+
+</html>

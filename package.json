@@ -1,0 +1,14 @@
+{
+  "name": "q",
+  "version": "1.0.0",
+  "main": "page.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "simple-oauth2": "^5.1.0"
+  }
+}
