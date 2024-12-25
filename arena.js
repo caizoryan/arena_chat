@@ -4,7 +4,7 @@ let host = "https://api.are.na/v2/";
 // API functions
 export const get_channel = async (slug, auth) => {
   console.log("get channel called", slug);
-  return await fetch(host + `channels/${slug}?per=200&force=true`, {
+  return await fetch(host + `channels/${slug}?per=100`, {
     headers: {
       Authorization: `Bearer ${auth}`,
       cache: "no-store",
@@ -16,9 +16,47 @@ export const get_channel = async (slug, auth) => {
       return response.json();
     })
     .then((data) => {
+      let length = data.length;
+      let get_last = false;
+      console.log("length", length, data.page * data.per);
+      if (length > data.page * data.per) {
+        // calculate last page
+        let last_page = Math.ceil(length / data.per);
+        return join_and_send_channel_page(data.contents, slug, last_page, auth);
+      }
       return data;
     });
 };
+
+const join_and_send_channel_page = async (contents, slug, page, auth) => {
+  return await fetch(host + `channels/${slug}?per=100&page=${page}&force=true`, {
+    headers: {
+      Authorization: `Bearer ${auth}`,
+      cache: "no-store",
+      "Cache-Control": "max-age=0, no-cache",
+      referrerPolicy: "no-referrer",
+    },
+  }).then((response) => response.json())
+    .then((data) => {
+      console.log("data", data);
+      let new_contents = data.contents;
+      let combined = contents.concat(new_contents);
+      data.contents = combined;
+      return data;
+    });
+}
+
+const get_channel_page = async (slug, page, auth) => {
+  return await fetch(host + `channels/${slug}?per=50&page=${page}&force=true`, {
+    headers: {
+      Authorization: `Bearer ${auth}`,
+      cache: "no-store",
+      "Cache-Control": "max-age=0, no-cache",
+      referrerPolicy: "no-referrer",
+    },
+  }).then((response) => response.json());
+
+}
 
 export const get_block = async (id) => {
   return await fetch(host + "blocks/" + id, {
