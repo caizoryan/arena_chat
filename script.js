@@ -1,10 +1,11 @@
 import { get_channel, add_block } from "./arena.js";
+import page from "./scripts/page.js";
+
 let slug = ""
 let token = localStorage.getItem("token");
 let input = document.getElementById("message");
 let send = document.getElementById("send");
 let me
-import page from "./scripts/utilities/page.js";
 
 
 const init = () => {
@@ -48,7 +49,7 @@ if (token) {
 else {
 	// // localhost 
 	// if (window.location.hostname === "localhost") {
-	window.location = "https://dev.are.na/oauth/authorize?client_id=RHnX4MgnrTomdvNAdr6o05NrrEIoargy13pZtH-Vw10&redirect_uri=https%3A%2F%2Fcaizoryan-httpsrequestforoauthtoken.web.val.run&response_type=code&scope="
+	window.location = "https://dev.are.na/oauth/authorize?client_id=CitL7Li-mdYNtuogTS9jsVHOXbXyZKHZFl9wrYimof4&redirect_uri=https%3A%2F%2Fcaizoryan-arenachat.web.val.run&response_type=code&scope="
 	// }
 
 	// production
