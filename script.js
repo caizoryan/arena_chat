@@ -142,9 +142,17 @@ function update_chat() {
 			last_date = new Date(block.connected_at)
 
 			let class_name = block.user.id === me?.id ? "me" : ""
+			class_name += block.class === "Media" ? " media" : ""
 			if (block.class == "Text") chat.innerHTML += `<div class="block ${class_name}" id="${block.id}">${block.content_html}<br></br><span class="user">${block.user.first_name}</span><span class="time">((${hours}:${minutes})) ${ampm}</span> </div>`;
-			if (block.class == "Image" || block.class == "Link") chat.innerHTML += `<div class="block ${class_name}" id="${block.id}"><img src="${block.image.display.url}"></div>`;
+			if (block.class == "Image") chat.innerHTML += `<div class="block ${class_name}" id="${block.id}"><img src="${block.image.display.url}"></div>`;
+			if (block.class == "Link") chat.innerHTML += `<a href=${block.source.url}><div class="block ${class_name}" id="${block.id}"><img src="${block.image.display.url}"></div></a>`;
+
+			if (block.class == "Media" && block.embed) chat.innerHTML += `<div class="block ${class_name}" id="${block.id}">${block.embed.html}</div>`;
+			else if (block.class == "Media") chat.innerHTML += `<div class="block ${class_name}" id="${block.id}"><img src="${block.image.display.url}"></div>`;
 			chat.scrollTop = chat.scrollHeight;
+
+			console.log(block)
+			console.log(block.class)
 		})
 	})
 }
