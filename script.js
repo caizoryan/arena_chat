@@ -114,7 +114,7 @@ function update_chat() {
 		return
 	}
 	else {
-		chat.innerHTML = "Loading...";
+		chat.innerHTML += "Loading...";
 
 		get_channel(slug, token).then((data) => {
 			chat.innerHTML = "";
