@@ -77,14 +77,6 @@ year.forEach((week) => {
 calendar.innerHTML += html
 
 let feed = document.getElementById("feed")
-let match_month = (w) => {
-	if (w.toLowerCase().includes("september"))
-	{
-		console.log("founc")
-		return true
-}
-	return false
-}
 
 get_channel("studio-notes-all", token).then((channel) => {
 	console.log(channel)

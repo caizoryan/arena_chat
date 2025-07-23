@@ -7,7 +7,6 @@ let input = document.getElementById("message");
 let send = document.getElementById("send");
 let me
 
-
 const init = () => {
 	page("/", () => { slug = ("") });
 	page("/:slug", (ctx) => {
@@ -16,7 +15,6 @@ const init = () => {
 	});
 	page({ hashbang: true });
 };
-
 
 input.onkeydown = (e) => {
 	e.stopPropagation();
@@ -56,7 +54,7 @@ if (token) {
 else {
 	// // localhost 
 	// if (window.location.href.includes("localhost")) {
-	// 	window.location = "https://dev.are.na/oauth/authorize?client_id=RHnX4MgnrTomdvNAdr6o05NrrEIoargy13pZtH-Vw10&redirect_uri=https%3A%2F%2Fcaizoryan-httpsrequestforoauthtoken.web.val.run&response_type=code&scope="
+  // 	window.location = "https://dev.are.na/oauth/authorize?client_id=RHnX4MgnrTomdvNAdr6o05NrrEIoargy13pZtH-Vw10&redirect_uri=https%3A%2F%2Fcaizoryan-httpsrequestforoauthtoken.web.val.run&response_type=code&scope="
 	// }
 
 	// production
@@ -79,6 +77,7 @@ function check_me() {
 		me = data
 	})
 }
+
 Number.prototype.zeroPad = function() {
 	return ('0' + this).slice(-2);
 };
@@ -106,7 +105,6 @@ function update_chat() {
 				document.querySelector(".channel-select").remove();
 			}
 		}
-
 
 
 		document.querySelector(".channel-select").appendChild(slug_input);
