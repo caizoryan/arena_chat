@@ -73,7 +73,8 @@ let token = localStorage.getItem("token")
 if (!token) window.location = "../index.html"
 
 // are.na
-let host = "http://localhost:3000/api/";
+// let host = "http://localhost:3000/api/";
+let host = "https://api.are.na/v2/";
 
 // API functions
 export const get_channel = async (slug, auth) => {
