@@ -1,26 +1,79 @@
 import { generate_year } from "./generate.js"
 import markdownIt from "./markdownIt/markdown-it.js";
+import page from "../scripts/page.js";
+
+let slug
+let set_slug = (s) => {
+	if (s != slug) {
+		slug = s
+		year = generate_year(2025)
+		update_channel()
+	}
+}
+
+let cmd
+
+const init = () => {
+	page("/", () =>  slug = "" );
+	page("/:slug", (ctx) => {
+		set_slug(ctx.params.slug)
+	});
+
+	page("/:slug/:cmd", (ctx) => {
+		set_slug(ctx.params.slug)
+		let cmd = (ctx.params.cmd)
+		console.log("slug", slug)
+		console.log("cmd", cmd)
+	});
+
+	page("/:slug/:cmd/:data", (ctx) => {
+		set_slug(ctx.params.slug)
+		let cmd = (ctx.params.cmd)
+		let data = (ctx.params.data)
+		console.log("cmd", cmd)
+		console.log("data", data)
+
+		if (cmd == "month") {
+			month = data
+			update_calendar()
+		}
+
+		if (cmd == "event") {
+			let target  = document.getElementById(data)
+			if (target) target.scrollIntoView({ behavior: "smooth" })
+		}
+
+	});
+
+	page({ hashbang: true });
+};
+
+window.addEventListener('hashchange', function() {
+	page("/"+window.location.href.split("#!/").pop())
+});
 
 let year = generate_year(2025)
-let month = 6
+let month = 7
 
 const contains_month = (week, month_num) => {
   let contains = false;
 
+
   week.forEach((day) => {
-    if (day.month_number === month_num) {
+    if (day.month_number == month_num) {
       contains = true;
     }
   });
+
 
   return contains;
 };
 
 let token = localStorage.getItem("token")
 if (!token) window.location = "../index.html"
-console.log(token)
+
 // are.na
-let host = "https://api.are.na/v2/";
+let host = "http://localhost:3000/api/";
 
 // API functions
 export const get_channel = async (slug, auth) => {
@@ -49,46 +102,58 @@ export const get_channel = async (slug, auth) => {
 
 // let day_class = day.day_name.toLowerCase().substring(0, 3);
 const calendar = document.getElementById("calendar")
-calendar.innerHTML  += `
-	<div class="week">
-		<div class="week-title">Sun</div>
-		<div class="week-title">Mon</div>
-		<div class="week-title">Tue</div>
-		<div class="week-title">Wed</div>
-		<div class="week-title">Thu</div>
-		<div class="week-title">Fri</div>
-		<div class="week-title">Sat</div>
-	</div>
-`
 
-let html = ''
-
-year.forEach((week) => {
-  let day_class = (day) => day.day_name.toLowerCase().substring(0, 3);
-	if (contains_month(week, month)) {
-		html += `<div class="week">`
-
-		week.forEach((day) => html += `<div class="day ${day_class(day)}">${day.date}</div>`)
-
-		html += `</div>`
-	}
-})
-
-calendar.innerHTML += html
 
 let feed = document.getElementById("feed")
+let event = (e) => `<a href="/calendar/#!/${slug}/event/${e.id}">${e.content.slice(0,8)}</a>`
+let update_calendar = () => {
+	// setTimeout(() =>,200)
+	
 
-get_channel("studio-notes-all", token).then((channel) => {
-	console.log(channel)
-	channel.contents.forEach((block) => {
-		if (block.class=="Text"){
-			feed.innerHTML+='<div class="day">' + MD(block.content).join("") + "</div>"
+	let html = `
+		<div class="week">
+			<a href="/calendar/#!/${slug}/month/${month-1}">prev</a>
+			${months[month]}
+			<a href="/calendar/#!/${slug}/month/${parseInt(month)+1}">next</a>
+		</div>
+		<div class="week">
+			<div class="week-title">Sun</div>
+			<div class="week-title">Mon</div>
+			<div class="week-title">Tue</div>
+			<div class="week-title">Wed</div>
+			<div class="week-title">Thu</div>
+			<div class="week-title">Fri</div>
+			<div class="week-title">Sat</div>
+		</div>
+	`
+	year.forEach((week) => {
+		let day_class = (day) => day.day_name.toLowerCase().substring(0, 3);
+		if (contains_month(week, month)) {
+			html += `<div class="week">`
+			week.forEach((day) => html += `
+<div class="day ${day_class(day)}">
+	${day.date}
+	${day.blocks.map(event).join("")}
+</div>`)
+
+			html += `</div>`
 		}
 	})
 
 
-})
+	calendar.innerHTML = html
+}
 
+let update_channel = () => {
+	get_channel(slug, token).then((channel) => {
+		channel.contents.forEach((block) => {
+			if (block.class=="Text") feed.innerHTML+='<div class="day">' + MD(block.content).join("") + "</div>"
+		})
+
+		update_calendar()
+	})
+}
+if (slug) update_channel()
 
 // ********************************
 // SECTION : MARKDOWN RENDERING
@@ -130,11 +195,7 @@ function eat(tree) {
 			if (!ignore) {
 				let children = eat(tree);
 				children = Array.isArray(children) ? children.join("") : children;
-
-				if (debug_print) {
-					console.log("---\nxxx\ntag:\nxxx\nx----\n", item.tag)
-				}
-
+				if (debug_print) {console.log("---\nxxx\ntag:\nxxx\nx----\n", item.tag)}
 				ret.push(`<${item.tag} ${at_string}> ${children} </${item.tag}>`);
 			}
 		}
@@ -182,11 +243,12 @@ let months = [
 const match_month = (word) => {
 	let matched = false
 	months.forEach((month) => {
-		if (word.toLowerCase() == month.toLowerCase()){
+		if (word.toLowerCase() == month.toLowerCase()) {
 			console.log("matched", word)
 			matched = true
 		}
 	})
+
 	return matched
 }
 
@@ -214,13 +276,23 @@ const format_content = (content) => {
 			}
 
 			let dt = ""
-
 			let it = parseInt(buff)
+			let date = new Date(buff + " " + word + " 2025")
+			let id = Math.floor(Math.random() * 1000000)
+			year.forEach((week) => {
+				week.forEach((day) => {
+					if (day.js_date.toDateString() == date.toDateString()){
+						day.blocks.push({id: "date-"+id, content: words.join(" ")})
+					}
+				})
+			})
+
 			if (!isNaN(it)) {
 				dt = buff;
 				skip = true
 			}
-			return "<span clas='month-word'>" + word + " "+ dt+ "</span>"
+
+			return `<span class='month-word' id=${"date-"+id}>` + word + " " + dt + "</span>"
 		}
 		else return word
 	}).join(" ")
@@ -264,3 +336,5 @@ export const MD = (content) => {
 
 	return body;
 };
+
+init()
