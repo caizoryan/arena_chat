@@ -1,5 +1,6 @@
 import { generate_year } from "./generate.js"
 import markdownIt from "./markdownIt/markdown-it.js";
+import markdownItMark from "./markdownIt/markdown-it-mark.js";
 import page from "../scripts/page.js";
 
 let slug
@@ -40,13 +41,21 @@ const init = () => {
 
 		if (cmd == "event") {
 			let target  = document.getElementById(data)
-			if (target) target.scrollIntoView({ behavior: "smooth" })
+			if (target) {
+				target.scrollIntoView({ behavior: "smooth", block: "center" })
+				highlight(target)
+			}
 		}
 
 	});
 
 	page({ hashbang: true });
 };
+
+let highlight = el => {
+	document.querySelectorAll(".highlight").forEach((e) => e.classList.remove("highlight"))
+	el.classList.add("highlight")
+}
 
 window.addEventListener('hashchange', function() {
 	page("/"+window.location.href.split("#!/").pop())
@@ -170,7 +179,7 @@ if (slug) update_channel()
 // ********************************
 // SECTION : MARKDOWN RENDERING
 // ********************************
-let md = new markdownIt('commonmark')//.use(makrdownItMark);
+let md = new markdownIt('commonmark').use(markdownItMark);
 
 let attrs = (item) => {
 	let attrs = item.attrs;

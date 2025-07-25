@@ -39,6 +39,16 @@
 	display: none;
 }
 
+mark {
+	background-color: var(--colors-red2);
+	padding: .2em;
+	color: var(--colors-red3);
+}
+
+.highlight {
+	box-shadow: 0 0 15px 10px var(--colors-red2);
+}
+
 li::marker{
 	content: "x ";
 }
