@@ -82,9 +82,10 @@ let token = localStorage.getItem("token")
 if (!token) window.location = "../index.html"
 
 // are.na
-let host = "http://localhost:3000/api/";
-// let host = "https://api.are.na/v2/";
-
+let host = "https://api.are.na/v2/";
+if (window.location.href.includes("localhost")){
+ host = "http://localhost:3000/api/";
+}
 // API functions
 export const get_channel = async (slug, auth) => {
   console.log("get channel called", slug);
