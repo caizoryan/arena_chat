@@ -73,8 +73,8 @@ let token = localStorage.getItem("token")
 if (!token) window.location = "../index.html"
 
 // are.na
-// let host = "http://localhost:3000/api/";
-let host = "https://api.are.na/v2/";
+let host = "http://localhost:3000/api/";
+// let host = "https://api.are.na/v2/";
 
 // API functions
 export const get_channel = async (slug, auth) => {
@@ -104,18 +104,15 @@ export const get_channel = async (slug, auth) => {
 // let day_class = day.day_name.toLowerCase().substring(0, 3);
 const calendar = document.getElementById("calendar")
 
-
 let feed = document.getElementById("feed")
-let event = (e) => `<a href="/calendar/#!/${slug}/event/${e.id}">${e.content.slice(0,8)}</a>`
+let event = (e) => `<a href="/calendar/#!/${slug}/event/${e.id}"><p>${e.content.slice(0,8)}</p></a>`
 let update_calendar = () => {
-	// setTimeout(() =>,200)
-	
-
+	let day_class = (day) => day.day_name.toLowerCase().substring(0, 3);
 	let html = `
 		<div class="week">
-			<a href="/calendar/#!/${slug}/month/${month-1}">prev</a>
+			<a href="/calendar/#!/${slug}/month/${parseInt(month)-1}"><button>prev</button></a>
 			${months[month]}
-			<a href="/calendar/#!/${slug}/month/${parseInt(month)+1}">next</a>
+			<a href="/calendar/#!/${slug}/month/${parseInt(month)+1}"><button>next</button></a>
 		</div>
 		<div class="week">
 			<div class="week-title">Sun</div>
@@ -128,14 +125,15 @@ let update_calendar = () => {
 		</div>
 	`
 	year.forEach((week) => {
-		let day_class = (day) => day.day_name.toLowerCase().substring(0, 3);
 		if (contains_month(week, month)) {
 			html += `<div class="week">`
-			week.forEach((day) => html += `
-<div class="day ${day_class(day)}">
-	${day.date}
-	${day.blocks.map(event).join("")}
-</div>`)
+
+			week.forEach((day) =>
+				html += `
+				<div class="day ${day_class(day)}">
+					${day.date}
+					${day.blocks.map(event).join("")}
+				</div>`)
 
 			html += `</div>`
 		}
@@ -147,13 +145,16 @@ let update_calendar = () => {
 
 let update_channel = () => {
 	get_channel(slug, token).then((channel) => {
+		let html = ""
 		channel.contents.forEach((block) => {
-			if (block.class=="Text") feed.innerHTML+='<div class="day">' + MD(block.content).join("") + "</div>"
+			if (block.class=="Text") html +='<div class="day">' + MD(block.content).join("") + "</div>"
 		})
 
+		feed.innerHTML = html
 		update_calendar()
 	})
 }
+
 if (slug) update_channel()
 
 // ********************************

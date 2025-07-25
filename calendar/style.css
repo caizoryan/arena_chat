@@ -42,6 +42,7 @@
 li::marker{
 	content: "x ";
 }
+
 li{margin-left:1.5em;}
 
 p {
@@ -49,18 +50,24 @@ p {
 	margin-bottom: .6em;
 }
 
+a {
+	text-decoration: none;
+	color: var(--colors-red3);
+}
+
+a:hover{
+	color: var(--colors-gray6);
+	text-decoration: underline;
+}
+
 button {
 	all: unset;
-
-	-webkit-user-select: none; /* Safari */
-	-ms-user-select: none; /* IE 10 and IE 11 */
-	user-select: none; /* Standard syntax */
 
 	cursor: pointer;
 	padding: 2px 3px;
 
-	background-color: var(--bg-color);
-	color: var(--text-color);
+	background-color: var(--colors-gray0);
+	color: var(--colors-red3);
 
 	border: .5px solid var(--light-color);
 	transition: all 0.2s;
@@ -110,13 +117,13 @@ button:hover {
 
 
 span {
-	text-decoration: underline;
-	color: red;
-	border: 1px orange solid;
+	color: var(--colors-gray7);
+	border: .1px var(--colors-gray7) solid;
+	padding: .1em;
 }
 
 .container  > *{
-	border: 1px solid red;
+	border: 1px solid var(--colors-red3);
 }
 
 .block img {
@@ -181,6 +188,10 @@ input {
 #feed {
 	width: 100%;
 	overflow-y: scroll;
+
+	box-shadow: 0 0 200px 10px rgba(0, 0, 0, 0.08);
+	background-color: var(--colors-red1);
+	color: var(--colors-gray5);
 }
 
 #feed .day{
@@ -220,7 +231,7 @@ input {
 }
 
 .day {
-	border: 1px solid black;
+	border: 1px solid var(--colors-red3);
 	background: var(--colors-gray0);
 	padding: .5em;
 }
