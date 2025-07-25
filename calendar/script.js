@@ -105,9 +105,19 @@ export const get_channel = async (slug, auth) => {
 const calendar = document.getElementById("calendar")
 
 let feed = document.getElementById("feed")
-let event = (e) => `<a href="/calendar/#!/${slug}/event/${e.id}"><p>${e.content.slice(0,8)}</p></a>`
+let event = (e) => `
+<a href="/calendar/#!/${slug}/event/${e.id}">
+	<div class="event">
+		<p>${e.content.slice(0,8)}</p>
+		<p class="hidden">${e.content}</p>
+	</div>
+</a>
+`
+
 let update_calendar = () => {
-	let day_class = (day) => day.day_name.toLowerCase().substring(0, 3);
+	let day_class = (day) => day.day_name.toLowerCase().substring(0, 3) + " " + is_month(day);
+  let is_month = (day) => day.month_number == month ? "" : "not-current-month"
+
 	let html = `
 		<div class="week">
 			<a href="/calendar/#!/${slug}/month/${parseInt(month)-1}"><button>prev</button></a>

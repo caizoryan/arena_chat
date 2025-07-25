@@ -74,8 +74,8 @@ button {
 }
 
 button:hover {
-	background-color: var(--light-color);
-	color: var(--bg-color);
+	background-color: var(--colors-red2);
+	color: var(--colors-red3);
 }
 
 .block {
@@ -142,6 +142,7 @@ textarea:focus {
 	outline: none;
 }
 
+
 input {
 	padding: 10px;
 }
@@ -178,7 +179,7 @@ input {
 	grid-template-rows: repeat(auto-fill, 1fr);
 	grid-gap: 10px;
 
-	overflow-y: scroll;
+	overflow: show;
 
 	box-shadow: 0 0 200px 10px rgba(0, 0, 0, 0.08);
 	background-color: var(--colors-red1);
@@ -234,4 +235,28 @@ input {
 	border: 1px solid var(--colors-red3);
 	background: var(--colors-gray0);
 	padding: .5em;
+}
+
+.day.not-current-month {
+	background: var(--colors-gray0);
+	color: var(--colors-gray2);
+	border: 1px solid var(--colors-red2);
+}
+
+.event .hidden{ display: none}
+.event {
+	position: relative;
+}
+
+.event:hover .hidden{
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 1.5em;
+	width: 30vw;
+	height: auto;
+	background-color: var(--colors-gray0);
+	border: 1px solid var(--colors-red3);
+	padding: 1em;
+	z-index: 99;
 }
