@@ -270,3 +270,31 @@ input {
 	padding: 1em;
 	z-index: 99;
 }
+
+
+.sun {
+  grid-column-start: 1;
+}
+.mon {
+  grid-column-start: 2;
+}
+
+.tue {
+  grid-column-start: 3;
+}
+
+.wed {
+  grid-column-start: 4;
+}
+
+.thu {
+  grid-column-start: 5;
+}
+
+.fri {
+  grid-column-start: 6;
+}
+
+.sat {
+  grid-column-start: 7;
+}

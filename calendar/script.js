@@ -127,12 +127,15 @@ let event = (e) => `
 let update_calendar = () => {
 	let day_class = (day) => day.day_name.toLowerCase().substring(0, 3) + " " + is_month(day);
   let is_month = (day) => day.month_number == month ? "" : "not-current-month"
+	let month_int=parseInt(month) 
+	let next_month = month_int == 11 ? 0 : month_int+1
+	let prev_month = month_int == 0 ? 11 : month_int-1
 
 	let html = `
 		<div class="week">
-			<a href="/calendar/#!/${slug}/month/${parseInt(month)-1}"><button>prev</button></a>
+			<a href="/calendar/#!/${slug}/month/${prev_month}"><button>prev</button></a>
 			${months[month]}
-			<a href="/calendar/#!/${slug}/month/${parseInt(month)+1}"><button>next</button></a>
+			<a href="/calendar/#!/${slug}/month/${next_month}"><button>next</button></a>
 		</div>
 		<div class="week">
 			<div class="week-title">Sun</div>
